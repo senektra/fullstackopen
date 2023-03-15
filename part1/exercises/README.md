@@ -10,3 +10,6 @@
 - [x] 1.9 unicafe, step4
 - [x] 1.10 unicafe, step5
 - [x] 1.11* unicafe, step6
+- [x] 1.12* anecdotes, step1
+- [x] 1.13* anecdotes, step2
+- [x] 1.14* anecdotes, step3
