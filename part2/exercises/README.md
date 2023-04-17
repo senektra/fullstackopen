@@ -4,3 +4,8 @@
 - [x] 2.3 Course information step8
 - [x] 2.4 Course information step9
 - [x] 2.5 Course information step10
+- [x] 2.6 The phonebook step1
+- [x] 2.7 The phonebook step2
+- [x] 2.8 The phonebook step3
+- [x] 2.9 The phonebook step4
+- [x] 2.10 The phonebook step5
