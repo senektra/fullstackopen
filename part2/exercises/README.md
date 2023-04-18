@@ -9,3 +9,4 @@
 - [x] 2.8 The phonebook step3
 - [x] 2.9 The phonebook step4
 - [x] 2.10 The phonebook step5
+- [x] 2.11 The phonebook step6
