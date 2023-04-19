@@ -10,3 +10,8 @@
 - [x] 2.9 The phonebook step4
 - [x] 2.10 The phonebook step5
 - [x] 2.11 The phonebook step6
+- [x] 2.12 The phonebook step7
+- [x] 2.13 The phonebook step8
+- [x] 2.14 The phonebook step9
+- [x] 2.15 The phonebook step10
+- [] 2.16 Phonebook step11
