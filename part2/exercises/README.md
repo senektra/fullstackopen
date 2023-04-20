@@ -14,4 +14,5 @@
 - [x] 2.13 The phonebook step8
 - [x] 2.14 The phonebook step9
 - [x] 2.15 The phonebook step10
-- [] 2.16 Phonebook step11
+- [x] 2.16 Phonebook step11
+- [x] 2.17 Phonebook step12

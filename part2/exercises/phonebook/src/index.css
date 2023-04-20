@@ -1,0 +1,17 @@
+.notif-green {
+  font-size: 20px;
+  background-color: lightgray;
+  border: 1px solid greenyellow;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.notif-red {
+  font-size: 20px;
+  background-color: lightgray;
+  border: 1px solid red;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+}

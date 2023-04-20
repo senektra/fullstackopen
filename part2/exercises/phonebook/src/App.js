@@ -4,12 +4,14 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import phonebookService from './services/phonebook'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [filter, setFilter] = useState('')
+  const [notifMsg, setNotifMsg] = useState({ text: '', color: '' })
 
   useEffect(() => {
     phonebookService
@@ -62,6 +64,17 @@ const App = () => {
             setNewName('')
             setNewPhone('')
           })
+          .catch(err => {
+            if (err.response.status === 404) {
+              setNotifMsg({
+                text: `Information for ${matchingPerson.name} has already been removed from server`,
+                color: 'red'
+              })
+              setTimeout(() => {
+                setNotifMsg({ text: '', color: '' })
+              }, 5000)
+            }
+          })
       }
     }
     // No matching person found with specified name or number, add to db.
@@ -77,6 +90,13 @@ const App = () => {
           setPersons(persons.concat(addedPerson))
           setNewName('')
           setNewPhone('')
+          setNotifMsg({
+            text: `Added ${addedPerson.name}`,
+            color: 'green'
+          })
+          setTimeout(() => {
+            setNotifMsg({ text: '', color: '' })
+          }, 5000)
         })
     }
   }
@@ -94,6 +114,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification msg={notifMsg} />
       <Filter label={"filter shown with: "} onChange={handleFilterChange} />
       <PersonForm 
         onSubmit={handlePersonAdd}
