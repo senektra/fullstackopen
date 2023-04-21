@@ -11,6 +11,7 @@ const CountryWeather = ({ selectedCountry }) => {
 
   useEffect(() => {
     if (!selectedCountry) {
+      setCurrentWeather(null)
       return
     }
 
