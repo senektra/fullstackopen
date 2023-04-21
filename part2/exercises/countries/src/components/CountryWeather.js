@@ -36,7 +36,7 @@ const CountryWeather = ({ selectedCountry }) => {
           />
         </div>
         <div className="text-left p-5">
-          <p>Temperature {kelvinToCelsius(currentWeather.main.temp).toPrecision(1)} Celsius</p>
+          <p>Temperature {kelvinToCelsius(currentWeather.main.temp).toFixed(1)} Celsius</p>
           <p>Wind {currentWeather.wind.speed} m/s</p>
         </div>
       </div>
