@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig(({ mode }) =>  {
   const env = loadEnv(mode, process.cwd())
-  const backendUrl = env.PROD ?
+  const backendUrl = mode === 'production' ?
     env.VITE_BACKEND_PROD_URL
     : env.VITE_BACKEND_DEV_URL
   return {
