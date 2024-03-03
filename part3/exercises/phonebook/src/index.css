@@ -1,0 +1,20 @@
+.notification-err {
+  font-size: 1.3rem;
+  text-align: center;
+
+  margin: 30px 100px;
+  padding: 20px;
+
+  background-color: rgb(221, 76, 76);
+}
+
+.notification-info {
+  font-size: 1.3rem;
+  text-align: center;
+
+  margin: 30px 100px;
+  padding: 20px;
+
+  background-color: rgb(76, 221, 132);
+}
+
