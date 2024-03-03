@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/api/notes'
+const baseUrl = 'https://fso-notes-backend.up.railway.app/api/notes'
 
 const getAll = () => {
   return axios.get(baseUrl).then(res => res.data)
