@@ -2,6 +2,12 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 
+require('dotenv').config()
+
+const Note = require('./models/note')
+const note = require('./models/note')
+
+// Express app
 app.use(cors())
 app.use(express.json())
 
@@ -12,24 +18,6 @@ app.use((req, res, next) => {
   console.log('---')
   next()
 })
-
-let notes = [
-  {
-    id: 1,
-    content: "HTML is easy",
-    important: true
-  },
-  {
-    id: 2,
-    content: "Browser can execute only JavaScript",
-    important: false
-  },
-  {
-    id: 3,
-    content: "GET and POST are the most important methods of HTTP protocol",
-    important: true
-  }
-]
 
 const generateId = () => {
   const maxId = notes.length > 0
@@ -48,14 +36,17 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/notes', (req, res) => {
-  res.json(notes)
+  Note.find({})
+    .then(notes => {
+      res.json(notes)
+    })
 })
 
 app.get('/api/notes/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const note = notes.find(note => note.id === id)
-  
-  note ? res.json(note) : res.status(404).end()
+  Note.findById(req.params.id)
+    .then(foundNote => {
+      res.json(foundNote)
+    })
 })
 
 app.post('/api/notes', (req, res) => {
@@ -67,22 +58,21 @@ app.post('/api/notes', (req, res) => {
     })
   }
 
-  const note = {
+  const noteToAdd = new Note({
     content: body.content,
     important: body.important || false,
-    id: generateId()
-  }
+  })
 
-  notes = notes.concat(note)
-
-  res.json(note)
+  noteToAdd.save()
+    .then(savedNote => {
+      res.json(savedNote)
+    })
 })
 
-app.delete('/api/notes/:id', (req, res) => {
-  const id = Number(req.params.id)
-  notes = notes.filter(note => note.id !== id)
-
-  res.status(204).end()
+app.delete('/api/notes/:id', (req, res, next) => {
+  Note.findByIdAndDelete(req.params.id)
+    .then(() => { res.status(204).end() })
+    .catch(next)
 })
 
 app.use(unknownEndpoint)
