@@ -5,7 +5,6 @@ const app = express()
 require('dotenv').config()
 
 const Note = require('./models/note')
-const note = require('./models/note')
 
 // Express app
 app.use(cors())
