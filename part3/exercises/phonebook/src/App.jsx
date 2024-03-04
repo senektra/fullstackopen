@@ -9,6 +9,11 @@ import Notification from './components/Notification'
 
 import './index.css'
 
+const notificationTypes = {
+  info: 'info',
+  error: 'err'
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
@@ -16,19 +21,13 @@ const App = () => {
   const [notifMessage, setNotifMessage] = useState({ message: null, type: null})
   const [filter, setFilter] = useState('')
 
-  const notificationTypes = {
-    info: 'info',
-    error: 'err'
-  }
-
   useEffect(() => {
     personsService.getAll()
       .then(persons => { setPersons(persons) })
-      .catch(err => { 
-        createNotification(
-          err.message, 
-          notificationTypes.error
-        )
+      .catch(err => { setNotifMessage({ 
+          message: err.message,
+          type: notificationTypes.error
+        })
       })
   }, [])
 
@@ -42,7 +41,7 @@ const App = () => {
     setNewNumber('')
   }
 
-  const createNotification = (message, type=notificationTypes.info) => {
+  const notify = (message, type=notificationTypes.info) => {
     setNotifMessage({
       message,
       type
@@ -65,7 +64,7 @@ const App = () => {
     const existingPerson = personFind()
 
     if (!validForm()) {
-      createNotification(
+      notify(
         'Form is invalid',
         notificationTypes.error
       )
@@ -77,24 +76,13 @@ const App = () => {
       )
 
       if (okToUpdate) {
-        personsService.put(existingPerson.id, {
-          ...existingPerson,
-          number: newNumber
-        })
+        personsService.put(existingPerson.id, {...existingPerson, number: newNumber})
           .then(putPerson => {
             setPersons(persons.map(p => p.id === putPerson.id ? putPerson : p))
             cleanForm()
-            createNotification(
-              `Updated number for ${putPerson.name}`,
-              notificationTypes.info
-            )
+            notify(`Updated number for ${putPerson.name}`)
           })
-          .catch(() => {
-            createNotification(
-              'Error occured while updating number',
-              notificationTypes.error
-            )
-          })
+          .catch(err => notify(err.message, notificationTypes.error))
       }
     }
     // Commit person to database
@@ -108,17 +96,9 @@ const App = () => {
         .then(addedPerson => {
           setPersons(persons.concat(addedPerson))
           cleanForm()
-          createNotification(
-            `Added user ${addedPerson.name}`,
-            notificationTypes.info
-          )
+          notify(`Added user ${addedPerson.name}`)
         })
-        .catch(() => {
-          createNotification(
-            'Error occured while adding person',
-            notificationTypes.error
-          )
-        })
+        .catch(err => notify(err.message, notificationTypes.error))
     }
   }
 
@@ -129,17 +109,9 @@ const App = () => {
       personsService.del(person.id)
         .then(deletedPerson => { 
           setPersons(persons.filter(p => p.id !== deletedPerson.id))
-          createNotification(
-            `${deletedPerson.name} was removed`,
-            notificationTypes.info
-          )
+          notify(`${deletedPerson.name} was removed`)
         })
-        .catch(() => {
-          createNotification(
-            `Error deleting ${person.name}`,
-            notificationTypes.error
-          )
-        })
+        .catch(err => notify(err.message, notificationTypes.error))
     }
   }
 
