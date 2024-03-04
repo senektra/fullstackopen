@@ -27,12 +27,12 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important)
 
-  const toggleImportant = (id, important) => {
-    noteService.patch(id, { important: !important })
-      .then(newNote => setNotes(notes.map(n => n.id === id ? newNote : n)))
+  const toggleImportant = (note) => {
+    noteService.put(note.id, {...note, important: !note.important})
+      .then(newNote => setNotes(notes.map(n => n.id === note.id ? newNote : n)))
       .catch(() => {
         showError('Error occured while updating note, removing from list')
-        setNotes(notes.filter(n => n.id !== id))
+        setNotes(notes.filter(n => n.id !== note.id))
       })
   }
 
@@ -69,7 +69,7 @@ const App = () => {
           <Note
             key={note.id}
             note={note}
-            toggleImportant={() => toggleImportant(note.id, note.important)}
+            toggleImportant={() => toggleImportant(note)}
           />
         )}
       </ul>
