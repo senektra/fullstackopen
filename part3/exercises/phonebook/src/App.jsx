@@ -54,6 +54,11 @@ const App = () => {
     }, 5000)
   }
 
+  const errorHandler = (err) => {
+    const errMsg = err.response.data.message
+    notify(errMsg, notificationTypes.error)
+  }
+
   const handleFilter = (event) => setFilter(event.target.value.toLowerCase())
   const handleName = (event) => setNewName(event.target.value)
   const handleNumber = (event) => setNewNumber(event.target.value)
@@ -82,7 +87,7 @@ const App = () => {
             cleanForm()
             notify(`Updated number for ${putPerson.name}`)
           })
-          .catch(err => notify(err.message, notificationTypes.error))
+          .catch(errorHandler)
       }
     }
     // Commit person to database
@@ -98,7 +103,7 @@ const App = () => {
           cleanForm()
           notify(`Added user ${addedPerson.name}`)
         })
-        .catch(err => notify(err.message, notificationTypes.error))
+        .catch(errorHandler)
     }
   }
 
@@ -107,11 +112,11 @@ const App = () => {
 
     if (ok) {
       personsService.del(person.id)
-        .then(deletedPerson => { 
-          setPersons(persons.filter(p => p.id !== deletedPerson.id))
-          notify(`${deletedPerson.name} was removed`)
+        .then(() => { 
+          setPersons(persons.filter(p => p.id !== person.id))
+          notify(`${person.name} was removed`)
         })
-        .catch(err => notify(err.message, notificationTypes.error))
+        .catch(errorHandler)
     }
   }
 
