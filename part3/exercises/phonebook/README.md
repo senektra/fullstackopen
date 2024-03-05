@@ -1,4 +1,5 @@
 # Frontend Phonebook
+__Deployed to https://fso-phonebook-frontend.up.railway.app__
 
 Uses Caddy to serve created dist folder from 'npm build'
 
