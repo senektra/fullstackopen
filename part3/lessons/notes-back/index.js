@@ -18,19 +18,11 @@ app.use((req, res, next) => {
   next()
 })
 
-const generateId = () => {
-  const maxId = notes.length > 0
-    ? Math.max(...notes.map(n => n.id))
-    : 0
-
-  return maxId + 1
-}
-
-const unknownEndpoint = (request, response) => {
+const unknownEndpoint = (_request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, _req, res, next) => {
   console.error(err.message)
 
   if (err.name === 'CastError') {
@@ -48,7 +40,7 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
 
-app.get('/api/notes', (req, res) => {
+app.get('/api/notes', (_req, res) => {
   Note.find({})
     .then(notes => {
       res.json(notes)
@@ -68,11 +60,11 @@ app.get('/api/notes/:id', (req, res, next) => {
 })
 
 app.post('/api/notes', (req, res, next) => {
-  const body = req.body
+  const { body } = req
 
   if (!body.content) {
     return res.status(404).json({
-      error: 'Content missing'
+      error: 'Content missing',
     })
   }
 
@@ -94,7 +86,7 @@ app.put('/api/notes/:id', (req, res, next) => {
   Note.findByIdAndUpdate(
     req.params.id,
     { content, important },
-    { new: true, runValidators: true, context: 'query' }
+    { new: true, runValidators: true, context: 'query' },
   )
     .then(updatedNote => res.json(updatedNote))
     .catch(next)
@@ -102,7 +94,7 @@ app.put('/api/notes/:id', (req, res, next) => {
 
 app.delete('/api/notes/:id', (req, res, next) => {
   Note.findByIdAndDelete(req.params.id)
-    .then(() => { res.status(204).end() })
+    .then(() => res.status(204).end())
     .catch(next)
 })
 
