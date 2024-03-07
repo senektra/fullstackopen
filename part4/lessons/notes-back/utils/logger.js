@@ -1,9 +1,16 @@
+const loggingAllowed = () => {
+  if (process.env.NODE_ENV === 'testing')
+    return false
+  else
+    return true
+}
+
 const info = (...params) => {
-  console.log(...params)
+  if (loggingAllowed()) console.log(...params)
 }
 
 const error = (...params) => {
-  console.error(...params)
+  if (loggingAllowed()) console.error(...params)
 }
 
 module.exports = {
