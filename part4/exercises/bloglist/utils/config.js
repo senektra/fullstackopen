@@ -5,7 +5,9 @@ const defaultPort = 3001
 
 const config = {
   env: process.env.NODE_ENV,
-  mongodbUri: process.env.MONGODB_URI,
+  mongodbUri: process.env.NODE_ENV === 'testing'
+    ? process.env.MONGODB_URI
+    : process.env.MONGODB_URI_TEST,
   port: process.env.PORT,
   morganTokens: [
     { type: 'body', func: (req, _res) => JSON.stringify(req.body) }

@@ -3,7 +3,12 @@ import morgan from 'morgan'
 import createError from './errors.js'
 import config from './config.js'
 
-const morganLogger = morgan(config.morganFormat)
+const morganLogger = morgan(config.morganFormat, {
+  skip: (_req, _res) => {
+    if (config.env === 'testing')
+      return true
+  }
+})
 
 const nonApiErrorHandler = (err, req, res, next) => {
   if (err.name === 'CastError') {

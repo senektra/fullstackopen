@@ -1,7 +1,10 @@
 import { test, describe } from 'node:test'
 import assert from 'node:assert'
 import listHelper from '../utils/list_helper.js'
-import { blogs, listWithOneBlog } from './bloglists.js'
+import dbHelper from './db_helper.js'
+
+const blogs = dbHelper.db
+const listWithOneBlog = dbHelper.dbWithOneBlog
 
 test('dummy returns one', () => {
   const blogs = []
