@@ -59,6 +59,9 @@ export default {
   allBlogs: () => {
     return Blog.find({})
   },
+  getBlog: (id) => {
+    return Blog.findById(id)
+  },
   getInvalidId: async () => {
     const blogThatWillNotExist = new Blog({ title: 'won\t be here soon' })
     await blogThatWillNotExist.save()

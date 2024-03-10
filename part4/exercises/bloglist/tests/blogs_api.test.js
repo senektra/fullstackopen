@@ -109,6 +109,48 @@ describe('POST requests at /api/blogs', () => {
   })
 
   beforeEach(doBeforeEach)
-  after(doAfter)
 })
 
+describe('PUT requests at /api/blogs', () => {
+  test('should update a specified blog with new data', async () => {
+    const blogToUpdate = (await dbHelper.allBlogs())[0].toJSON()
+    blogToUpdate.title = 'This is a new title'
+    blogToUpdate.author = 'New author'
+    blogToUpdate.url = 'New url'
+    blogToUpdate.likes = 141
+
+    const newBlogFromApi = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const newBlogInDb = await dbHelper.getBlog(blogToUpdate.id)
+    const blogsAfterUpdate = await dbHelper.allBlogs()
+
+    assert.strictEqual(blogsAfterUpdate.length, dbHelper.db.length)
+    assert.deepStrictEqual(newBlogFromApi.body, blogToUpdate)
+    assert.deepStrictEqual(newBlogInDb.toJSON(), blogToUpdate)
+  })
+
+  beforeEach(doBeforeEach)
+})
+
+describe('DELETE requests at /api/blogs', () => {
+  test('should delete a blog when given specific id', async () => {
+    const blogToDelete = (await dbHelper.allBlogs())[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAfterDelete = await dbHelper.allBlogs()
+    const titles = blogsAfterDelete.map(b => b.title)
+
+    assert.strictEqual(blogsAfterDelete.length, dbHelper.db.length - 1)
+    assert(!titles.includes(blogToDelete.title))
+  })
+
+  beforeEach(doBeforeEach)
+  after(doAfter)
+})
