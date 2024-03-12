@@ -2,14 +2,14 @@ import { test, describe, after, beforeEach } from 'node:test'
 import assert from 'node:assert'
 import mongoose from 'mongoose'
 import supertest from 'supertest'
-import dbHelper from './db_helper.js'
+import blogHelper from './helpers/blog_helper.js'
 import app from '../app.js'
 
 const api = supertest(app)
 
 const doBeforeEach = async () => {
-  await dbHelper.deleteBlogs()
-  await dbHelper.saveBlogs()
+  await blogHelper.deleteBlogs()
+  await blogHelper.saveBlogs()
 }
 
 const doAfter = () => {
@@ -36,7 +36,7 @@ describe('GET requests at /api/blogs', () => {
 
   test('should get all blogs stored via dbHelper', async () => {
     const res = await api.get('/api/blogs')
-    assert.strictEqual(res.body.length, dbHelper.db.length)
+    assert.strictEqual(res.body.length, blogHelper.db.length)
   })
 
   test('should expect the first blog to be authored by \'Michael Chan\'', async () => {
@@ -52,29 +52,29 @@ describe('POST requests at /api/blogs', () => {
   test('should add blog to database', async () => {
     await api
       .post('/api/blogs')
-      .send({ ...(dbHelper.dbWithOneBlog[0]) })
+      .send({ ...(blogHelper.dbWithOneBlog[0]) })
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const blogs = await dbHelper.allBlogs()
-    assert.strictEqual(blogs.length, dbHelper.db.length + 1)
+    const blogs = await blogHelper.allBlogs()
+    assert.strictEqual(blogs.length, blogHelper.db.length + 1)
   })
 
   test('blog added should be correctly reflected in database', async () => {
     await api
       .post('/api/blogs')
-      .send({ ...(dbHelper.dbWithOneBlog[0]) })
+      .send({ ...(blogHelper.dbWithOneBlog[0]) })
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const blogs = (await dbHelper.allBlogs()).map(b => b.toJSON())
+    const blogs = (await blogHelper.allBlogs()).map(b => b.toJSON())
     const lastBlog = blogs[blogs.length - 1]
     delete lastBlog.id
-    assert.deepStrictEqual(lastBlog, dbHelper.dbWithOneBlog[0])
+    assert.deepStrictEqual(lastBlog, blogHelper.dbWithOneBlog[0])
   })
 
   test('likes default to 0 when not specified', async () => {
-    const blogWithoutLikes = dbHelper.dbWithOneBlog[0]
+    const blogWithoutLikes = blogHelper.dbWithOneBlog[0]
     delete blogWithoutLikes.likes
 
     await api
@@ -83,13 +83,13 @@ describe('POST requests at /api/blogs', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const blogs = (await dbHelper.allBlogs()).map(b => b.toJSON())
+    const blogs = (await blogHelper.allBlogs()).map(b => b.toJSON())
     const lastBlog = blogs[blogs.length - 1]
     assert.strictEqual(lastBlog.likes, 0)
   })
 
   test('response is 400 Bad Request when no title in blog', async () => {
-    const blogWithoutTitle = dbHelper.dbWithOneBlog[0]
+    const blogWithoutTitle = blogHelper.dbWithOneBlog[0]
     delete blogWithoutTitle.title
 
     await api
@@ -99,7 +99,7 @@ describe('POST requests at /api/blogs', () => {
   })
 
   test('response is 400 Bad Request when no url in blog', async () => {
-    const blogWithoutUrl = dbHelper.dbWithOneBlog[0]
+    const blogWithoutUrl = blogHelper.dbWithOneBlog[0]
     delete blogWithoutUrl.url
 
     await api
@@ -113,7 +113,7 @@ describe('POST requests at /api/blogs', () => {
 
 describe('PUT requests at /api/blogs', () => {
   test('should update a specified blog with new data', async () => {
-    const blogToUpdate = (await dbHelper.allBlogs())[0].toJSON()
+    const blogToUpdate = (await blogHelper.allBlogs())[0].toJSON()
     blogToUpdate.title = 'This is a new title'
     blogToUpdate.author = 'New author'
     blogToUpdate.url = 'New url'
@@ -125,10 +125,10 @@ describe('PUT requests at /api/blogs', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    const newBlogInDb = await dbHelper.getBlog(blogToUpdate.id)
-    const blogsAfterUpdate = await dbHelper.allBlogs()
+    const newBlogInDb = await blogHelper.getBlog(blogToUpdate.id)
+    const blogsAfterUpdate = await blogHelper.allBlogs()
 
-    assert.strictEqual(blogsAfterUpdate.length, dbHelper.db.length)
+    assert.strictEqual(blogsAfterUpdate.length, blogHelper.db.length)
     assert.deepStrictEqual(newBlogFromApi.body, blogToUpdate)
     assert.deepStrictEqual(newBlogInDb.toJSON(), blogToUpdate)
   })
@@ -138,16 +138,16 @@ describe('PUT requests at /api/blogs', () => {
 
 describe('DELETE requests at /api/blogs', () => {
   test('should delete a blog when given specific id', async () => {
-    const blogToDelete = (await dbHelper.allBlogs())[0]
+    const blogToDelete = (await blogHelper.allBlogs())[0]
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
       .expect(204)
 
-    const blogsAfterDelete = await dbHelper.allBlogs()
+    const blogsAfterDelete = await blogHelper.allBlogs()
     const titles = blogsAfterDelete.map(b => b.title)
 
-    assert.strictEqual(blogsAfterDelete.length, dbHelper.db.length - 1)
+    assert.strictEqual(blogsAfterDelete.length, blogHelper.db.length - 1)
     assert(!titles.includes(blogToDelete.title))
   })
 

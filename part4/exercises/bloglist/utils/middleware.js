@@ -1,6 +1,6 @@
 //import morgan from 'morgan'
 import morgan from 'morgan'
-import createError from './errors.js'
+import { createError } from './errors.js'
 import config from './config.js'
 
 const morganLogger = morgan(config.morganFormat, {

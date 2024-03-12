@@ -1,4 +1,4 @@
-import Blog from '../models/blog.js'
+import Blog from '../../models/blog.js'
 
 const dbWithOneBlog = [
   {

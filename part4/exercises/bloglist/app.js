@@ -4,6 +4,7 @@ import { connect } from 'mongoose'
 import 'dotenv/config'
 import 'express-async-errors'
 import blogsRouter from './controllers/blogs.js'
+import usersRouter from './controllers/users.js'
 import middleware from './utils/middleware.js'
 import config from './utils/config.js'
 
@@ -19,7 +20,8 @@ app.use(cors())
 app.use(express.json())
 
 // Routers
-app.use(blogsRouter)
+app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 // Error Handlers
 app.use(middleware.nonApiErrorHandler)

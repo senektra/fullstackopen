@@ -6,13 +6,14 @@ const defaultPort = 3001
 const config = {
   env: process.env.NODE_ENV,
   mongodbUri: process.env.NODE_ENV === 'testing'
-    ? process.env.MONGODB_URI
-    : process.env.MONGODB_URI_TEST,
+    ? process.env.MONGODB_URI_TEST
+    : process.env.MONGODB_URI,
   port: process.env.PORT,
   morganTokens: [
     { type: 'body', func: (req, _res) => JSON.stringify(req.body) }
   ],
-  morganFormat: ':method :url :status :res[content-length] - :response-time ms :body'
+  morganFormat: ':method :url :status :res[content-length] - :response-time ms :body',
+  saltRounds: 10
 }
 
 config.morganTokens.forEach(token => {
@@ -25,7 +26,7 @@ if (config.port === undefined) {
 }
 
 if (config.mongodbUri === undefined) {
-  console.error('No URI set for MongoDB database, aborting app')
+  logger.error('No URI set for MongoDB database, aborting')
   process.exit(1)
 }
 

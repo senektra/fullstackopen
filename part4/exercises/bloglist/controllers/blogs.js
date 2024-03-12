@@ -5,20 +5,20 @@ const blogsRouter = Router()
 
 // Get requests
 
-blogsRouter.get('/api/blogs', async (_req, res) => {
+blogsRouter.get('/', async (_req, res) => {
   res.json(await Blog.find({}))
 })
 
 // Post requests
 
-blogsRouter.post('/api/blogs', async (req, res) => {
+blogsRouter.post('/', async (req, res) => {
   const blog = new Blog(req.body)
   res.status(201).json(await blog.save({ setDefaultsOnInsert: true }))
 })
 
 // Put requests
 
-blogsRouter.put('/api/blogs/:id', async (req, res) => {
+blogsRouter.put('/:id', async (req, res) => {
   const {
     title,
     url,
@@ -37,7 +37,7 @@ blogsRouter.put('/api/blogs/:id', async (req, res) => {
 
 // Delete requests
 
-blogsRouter.delete('/api/blogs/:id', async (req, res) => {
+blogsRouter.delete('/:id', async (req, res) => {
   await Blog.findByIdAndDelete(req.params.id)
   res.status(204).end()
 })
