@@ -21,5 +21,14 @@ export const userError = {
   ),
   passwordTooShort: createUserError(
     400, 'Password is too short'
+  ),
+  badLogin: createUserError(
+    403, 'Invalid username or password'
+  ),
+  userNotAuthorized: createUserError(
+    401, 'Invalid access token'
+  ),
+  userNotAllowed: createUserError(
+    403, 'User forbidden'
   )
 }

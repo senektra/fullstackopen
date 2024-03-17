@@ -25,6 +25,15 @@ const deleteAll = () => {
   return User.deleteMany({})
 }
 
+const addOneTestUser = async () => {
+  const userToAdd = new User({
+    username: testUserInfo.username,
+    name: testUserInfo.name,
+    passwordHash: await bcrypt.hash(testUserInfo.password, config.saltRounds)
+  })
+  return userToAdd.save()
+}
+
 const addTestUsers = async () => {
   const users = testUsers.map(async (u) => new User({
     username: u.username,
@@ -37,6 +46,7 @@ const addTestUsers = async () => {
 export default {
   getUsers,
   deleteAll,
+  addOneTestUser,
   addTestUsers,
   testUserInfo,
   testUsers

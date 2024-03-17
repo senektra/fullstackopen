@@ -52,15 +52,15 @@ export default {
   deleteBlogs: () => {
     return Blog.deleteMany({})
   },
-  saveBlogs: () => {
-    const BlogsToSave = db.map(n => new Blog({ ...n }))
+  saveBlogs: (userForBlogs) => {
+    const BlogsToSave = db.map(n => new Blog({ ...n, user: userForBlogs }))
     return Blog.bulkSave(BlogsToSave)
   },
   allBlogs: () => {
-    return Blog.find({})
+    return Blog.find({}).populate('user')
   },
   getBlog: (id) => {
-    return Blog.findById(id)
+    return Blog.findById(id).populate('user')
   },
   getInvalidId: async () => {
     const blogThatWillNotExist = new Blog({ title: 'won\t be here soon' })

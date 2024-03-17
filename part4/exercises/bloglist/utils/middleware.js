@@ -11,13 +11,21 @@ const morganLogger = morgan(config.morganFormat, {
 })
 
 const nonApiErrorHandler = (err, req, res, next) => {
-  if (err.name === 'CastError') {
-    next(createError(400, err.name, 'Invalid format for id'))
-  }
-  else if (err.name === 'ValidationError') {
-    next(createError(400, err.name, Object.values(err.errors)[0].message))
-  } else {
-    next(err)
+  switch (err.name) {
+    case 'CastError':
+      next(createError(400, err.name, 'Invalid format for id'))
+      break
+    case 'ValidationError':
+      next(createError(400, err.name, Object.values(err.errors)[0].message))
+      break
+    case 'JsonWebTokenError':
+      next(createError(400, err.name, 'Token missing or invalid'))
+      break
+    case 'TokenExpiredError':
+      next(createError(401, err.name, 'Token has expired'))
+      break
+    default:
+      next(err)
   }
 }
 

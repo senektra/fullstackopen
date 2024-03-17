@@ -1,5 +1,6 @@
 import morgan from 'morgan'
 import logger from './logger.js'
+import 'dotenv/config'
 
 const defaultPort = 3001
 

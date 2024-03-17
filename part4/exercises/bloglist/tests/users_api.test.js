@@ -22,14 +22,13 @@ const doAfter = () => {
 describe('GET requests at /api/user', () => {
   beforeEach(doBeforeEach(true))
 
-  test('should return all users in db', async () => {
+  test('should return all users in database', async () => {
     const res = await api
       .get('/api/users')
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
     const usersAdded = res.body
-
     assert.strictEqual(usersAdded.length, userHelper.testUsers.length)
   })
 
@@ -69,65 +68,67 @@ describe('POST requests at /api/users', () => {
     })
   })
 
-  test('should not add a user when username is not given', async () => {
-    const userToAdd = { ...userHelper.testUserInfo }
-    delete userToAdd.username
+  describe('should not add a user', () => {
+    test('when username is not given', async () => {
+      const userToAdd = { ...userHelper.testUserInfo }
+      delete userToAdd.username
 
-    const res = await api
-      .post('/api/users')
-      .send(userToAdd)
-      .expect(400)
+      const res = await api
+        .post('/api/users')
+        .send(userToAdd)
+        .expect(400)
 
-    const usersInDb = await userHelper.getUsers()
-    const err = res.body
-    assert.strictEqual(usersInDb.length, 0)
-    assert.deepStrictEqual(err, userError.noUsername)
+      const usersInDb = await userHelper.getUsers()
+      const err = res.body
+      assert.strictEqual(usersInDb.length, 0)
+      assert.deepStrictEqual(err, userError.noUsername)
+    })
+
+    test('when password is not given', async () => {
+      const userToAdd = { ...userHelper.testUserInfo }
+      delete userToAdd.password
+
+      const res = await api
+        .post('/api/users')
+        .send(userToAdd)
+        .expect(400)
+
+      const usersInDb = await userHelper.getUsers()
+      const err = res.body
+      assert.strictEqual(usersInDb.length, 0)
+      assert.deepStrictEqual(err, userError.noPassword)
+    })
+
+    test('when username is too short', async () => {
+      const userToAdd = { ...userHelper.testUserInfo }
+      userToAdd.username = 'ts'
+
+      const res = await api
+        .post('/api/users')
+        .send(userToAdd)
+        .expect(400)
+
+      const usersInDb = await userHelper.getUsers()
+      const err = res.body
+      assert.strictEqual(usersInDb.length, 0)
+      assert.deepStrictEqual(err, userError.usernameTooShort)
+    })
+
+    test('when password is too short', async () => {
+      const userToAdd = { ...userHelper.testUserInfo }
+      userToAdd.password = 'pw'
+
+      const res = await api
+        .post('/api/users')
+        .send(userToAdd)
+        .expect(400)
+
+      const usersInDb = await userHelper.getUsers()
+      const err = res.body
+      assert.strictEqual(usersInDb.length, 0)
+      assert.deepStrictEqual(err, userError.passwordTooShort)
+    })
   })
-
-  test('should not add a user when password is not given', async () => {
-    const userToAdd = { ...userHelper.testUserInfo }
-    delete userToAdd.password
-
-    const res = await api
-      .post('/api/users')
-      .send(userToAdd)
-      .expect(400)
-
-    const usersInDb = await userHelper.getUsers()
-    const err = res.body
-    assert.strictEqual(usersInDb.length, 0)
-    assert.deepStrictEqual(err, userError.noPassword)
-  })
-
-  test('should not add a user when username is too short', async () => {
-    const userToAdd = { ...userHelper.testUserInfo }
-    userToAdd.username = 'ts'
-
-    const res = await api
-      .post('/api/users')
-      .send(userToAdd)
-      .expect(400)
-
-    const usersInDb = await userHelper.getUsers()
-    const err = res.body
-    assert.strictEqual(usersInDb.length, 0)
-    assert.deepStrictEqual(err, userError.usernameTooShort)
-  })
-
-  test('should not add a user when password is too short', async () => {
-    const userToAdd = { ...userHelper.testUserInfo }
-    userToAdd.password = 'pw'
-
-    const res = await api
-      .post('/api/users')
-      .send(userToAdd)
-      .expect(400)
-
-    const usersInDb = await userHelper.getUsers()
-    const err = res.body
-    assert.strictEqual(usersInDb.length, 0)
-    assert.deepStrictEqual(err, userError.passwordTooShort)
-  })
-
-  after(doAfter)
 })
+
+after(doAfter)
