@@ -2,12 +2,22 @@ import axios from 'axios'
 
 const baseUrl = `${__API_URL__}/api/notes`
 
+let token = null
+
+const setToken = newToken => {
+  token = `Bearer ${newToken}`
+}
+
 const getAll = () => {
   return axios.get(baseUrl).then(res => res.data)
 }
 
 const create = newResource => {
-  return axios.post(baseUrl, newResource).then(res => res.data)
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  return axios.post(baseUrl, newResource, config).then(res => res.data)
 }
 
 const put = (id, newResource) => {
@@ -18,4 +28,4 @@ const patch = (id, patches) => {
   return axios.patch(`${baseUrl}/${id}`, patches).then(res => res.data)
 }
 
-export default { getAll, create, put, patch }
+export default { getAll, create, put, patch, setToken }

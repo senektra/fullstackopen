@@ -33,7 +33,7 @@ notesRouter.post('/', async (req, res) => {
     return res.status(401).json({ error: 'token invalid' })
   }
 
-  const user = await (User.findById(body.userId))
+  const user = await (User.findById(decodedToken.id))
 
   const noteToAdd = new Note({
     content: body.content,
