@@ -45,7 +45,7 @@ const App = () => {
       <Notification message={notifMsg} />
       <h2>blogs</h2>
       {!user ?
-        <LoginForm setUser={loginUser} />
+        <LoginForm onUserLoggedIn={loginUser} />
       :
         <div>
           <div>

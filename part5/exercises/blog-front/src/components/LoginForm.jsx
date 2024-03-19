@@ -4,7 +4,7 @@ import Notification from './Notification'
 
 import loginService from '../services/login'
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ onUserLoggedIn }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [notifMessage, setNotifMessage] = useState(null)
@@ -20,7 +20,7 @@ const LoginForm = ({ setUser }) => {
     try {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('user', JSON.stringify(user))
-      setUser(user)
+      onUserLoggedIn(user)
       resetForm()
     } catch (err) {
       setNotifMessage({
