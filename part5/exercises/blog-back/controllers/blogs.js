@@ -8,7 +8,7 @@ const blogsRouter = Router()
 // Get requests
 
 blogsRouter.get('/', async (_req, res) => {
-  res.json(await Blog.find({}))
+  res.json(await Blog.find().populate('user'))
 })
 
 // Post requests

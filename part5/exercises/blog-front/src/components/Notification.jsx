@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from 'react'
 
 const Notification = ({ message }) => {
   const [notifMessage, setNotifMessage] = useState(null)
@@ -17,7 +17,7 @@ const Notification = ({ message }) => {
 
       setTimeoutId(newTimeoutId)
     }
-  }, [message])
+  }, [message, timeoutId])
 
   if (!notifMessage)
     return null

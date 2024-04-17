@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from 'axios'
 const baseUrl = `${__API_URL__}/api/users/login`
 
 const login = async credentials => {

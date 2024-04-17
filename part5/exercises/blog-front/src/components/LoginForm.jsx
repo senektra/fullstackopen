@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 import Notification from './Notification'
 
@@ -16,7 +16,7 @@ const LoginForm = ({ onUserLoggedIn }) => {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    
+
     try {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('user', JSON.stringify(user))

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 import Notification from './Notification'
 
@@ -16,6 +16,7 @@ const BlogForm = ({ onNewBlog }) => {
     try {
       const newBlog = await blogService.createBlog({ title, author, url })
       onNewBlog(newBlog)
+      cleanForm()
     } catch (err) {
       setNotifMsg({
         type: 'Error',
@@ -23,7 +24,13 @@ const BlogForm = ({ onNewBlog }) => {
       })
     }
   }
-  
+
+  const cleanForm = () => {
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+
   return (
     <div>
       <Notification message={notifMsg} />
