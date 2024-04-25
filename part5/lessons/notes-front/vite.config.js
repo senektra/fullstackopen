@@ -10,6 +10,11 @@ export default defineConfig(({ mode }) =>  {
     plugins: [react()],
     define: {
       __API_URL__: JSON.stringify(backendUrl)
-    }
+    },
+    test: {
+      environment: 'jsdom',
+      globals: true,
+      setupFiles: './testSetup.js',
+    },
   }
 })
