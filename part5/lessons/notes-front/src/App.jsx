@@ -109,14 +109,15 @@ const App = () => {
       <Notification message={errorMessage} />
 
       {!user && loginForm()}
-      {user && <div>
-        <p>{user.name} logged in</p>
-        <Togglable buttonLabel='new note' ref={noteFormRef}>
-          <NoteForm
-            createNote={addNote}
-          />
-        </Togglable>
-      </div>
+      {user &&
+        <div>
+          <p>{user.name} logged in</p>
+          <Togglable buttonLabel='new note' ref={noteFormRef}>
+            <NoteForm
+              createNote={addNote}
+            />
+          </Togglable>
+        </div>
       }
 
       <div>
