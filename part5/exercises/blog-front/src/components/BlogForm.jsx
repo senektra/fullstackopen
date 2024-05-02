@@ -14,7 +14,12 @@ const BlogForm = ({ onNewBlog }) => {
     e.preventDefault()
 
     try {
-      const newBlog = await blogService.createBlog({ title, author, url })
+      const newBlog = {
+        title,
+        author,
+        url
+      }
+      await blogService.createBlog(newBlog)
       onNewBlog(newBlog)
       cleanForm()
     } catch (err) {
@@ -41,6 +46,7 @@ const BlogForm = ({ onNewBlog }) => {
             type="text"
             name="title"
             value={title}
+            placeholder='Title'
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
@@ -50,6 +56,7 @@ const BlogForm = ({ onNewBlog }) => {
             type="text"
             name="author"
             value={author}
+            placeholder='Author'
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
@@ -59,6 +66,7 @@ const BlogForm = ({ onNewBlog }) => {
             type="text"
             name="url"
             value={url}
+            placeholder='URL'
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>

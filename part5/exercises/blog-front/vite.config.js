@@ -7,9 +7,17 @@ export default defineConfig(({ mode }) => {
     env.VITE_BACKEND_PROD_URL
     : env.VITE_BACKEND_DEV_URL
   return {
-    plugins: [react()],
+    plugins: [
+      react(),
+    ],
     define: {
-      __API_URL__: JSON.stringify(backendUrl)
+      __API_URL__: JSON.stringify(backendUrl),
+      __DISABLE_AXIOS__: mode === 'testing' ? true : false
+    },
+    test: {
+      environment: 'jsdom',
+      globals: true,
+      setupFiles: './testSetup.js',
     }
   }
 })

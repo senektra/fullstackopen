@@ -13,6 +13,7 @@ const getAll = () => {
 }
 
 const createBlog = async (blog) => {
+  if (__DISABLE_AXIOS__) return
   const options = {
     headers: { Authorization: token },
   }
@@ -22,6 +23,7 @@ const createBlog = async (blog) => {
 }
 
 const updateBlog = async (blog) => {
+  if (__DISABLE_AXIOS__) return
   const options = {
     headers: { Authorization: token }
   }

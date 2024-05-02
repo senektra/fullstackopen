@@ -40,7 +40,7 @@ const Blog = ({ blog, onUpdate }) => {
   const toggleView = () => setShowContent(!showContent)
 
   const content = () => (
-    <div>
+    <div className='blog-content'>
       {blog.url}<br />
       {blog.likes}<button onClick={() => handleLike(blog)}>like</button><br />
       {blog.user.username}<br />
@@ -52,7 +52,7 @@ const Blog = ({ blog, onUpdate }) => {
 
   return (
     <div>
-      <div style={blogStyle}>
+      <div style={blogStyle} className='blog-listing'>
         {blog.title} {blog.author}
         <button onClick={toggleView}>{buttonViewLabel}</button>
         {showContent ? content() : null}
